@@ -1,69 +1,69 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
-import Restaurant from '../model/restaurant';
+import FoodTruck from '../model/foodtruck';
 
 export default({ config, db}) => {
     let api = Router();
     // CRUD - Create, Read, Update, Delete
-    // 'v1/restaurant/add' - Create
+    // 'v1/foodtruck/add' - Create
     api.post('/add', (req, res) => {
-        let newRest = new Restaurant();
-        newRest.name = req.body.name;
+        let newFoodTruck = new FoodTruck();
+        newFoodTruck.name = req.body.name;
 
-        newRest.save(err => {
+        newFoodTruck.save(err => {
             if (err) {
                 res.setEncoding(err);
             } else {
-                res.json({message: 'Restaurant saved successfully'});
+                res.json({message: 'FoodTruck saved successfully'});
             }
         });
     });
-    // 'v1/restaurant' - Read
+    // 'v1/foodtruck' - Read
     api.get('/', (req, res) => {
-        Restaurant.find({}, (err, restaurants) => { // Mongo find everything when empty
+        FoodTruck.find({}, (err, foodtrucks) => { // Mongo find everything when empty
             if (err) {
                 res.send(err);
             } else {
-                res.json(restaurants);
+                res.json(foodtrucks);
             }
         }); 
     });
-    // 'v1/restaurant/:id' - Read 1
+    // 'v1/foodtruck/:id' - Read 1
     api.get('/:id', (req, res) => {
-        Restaurant.findById(req.params.id, (err, restaurant) => {
+        FoodTruck.findById(req.params.id, (err, foodtruck) => {
             if (err) {
                 res.send(err);
             } else {
-                res.json(restaurant);
+                res.json(foodtruck);
             }
         });
     });
 
-    // 'v1/restaurant/:id' - Update
+    // 'v1/foodtruck/:id' - Update
     api.put('/:id', (req,res) => {
-        Restaurant.findById(req.params.id, (err, restaurant) => {
+        FoodTruck.findById(req.params.id, (err, foodtruck) => {
             if (err) {
                 res.send(err);
             } else {
-                restaurant.name = req.body.name;
-                restaurant.save(err => {
+                foodtruck.name = req.body.name;
+                foodtruck.save(err => {
                     if (err) {
                         res.send(err);
                     } else {
-                        res.json({message: "Restaurant updated"});
+                        res.json({message: "FoodTruck updated"});
                     }
                 });
             }
         });
     });
 
-    // 'v1/restaurant/id' - Delete
+    // 'v1/foodtruck/id' - Delete
     api.delete('/:id', (req, res) => {
-        Restaurant.remove({_id: req.params.id}, (err, restaurant) => {
+        FoodTruck.remove({_id: req.params.id}, (err, foodtruck) => {
             if (err) {
                 res.send(err);
             } else {
-                res.json({message: "Restaurant Successfuly Removed"});
+                res.json({message: "FoodTruck Successfuly Removed"});
             }
         });
     });
