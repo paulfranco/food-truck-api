@@ -39,7 +39,7 @@ export default({ config, db}) => {
         });
     });
 
-    // 'v1/restaurant/:1' - Update
+    // 'v1/restaurant/:id' - Update
     api.put('/:id', (req,res) => {
         Restaurant.findById(req.params.id, (err, restaurant) => {
             if (err) {
@@ -53,6 +53,17 @@ export default({ config, db}) => {
                         res.json({message: "Restaurant updated"});
                     }
                 });
+            }
+        });
+    });
+
+    // 'v1/restaurant/id' - Delete
+    api.delete('/:id', (req, res) => {
+        Restaurant.remove({_id: req.params.id}, (err, restaurant) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json({message: "Restaurant Successfuly Removed"});
             }
         });
     });
