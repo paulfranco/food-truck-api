@@ -38,5 +38,23 @@ export default({ config, db}) => {
             }
         });
     });
+
+    // 'v1/restaurant/:1' - Update
+    api.put('/:id', (req,res) => {
+        Restaurant.findById(req.params.id, (err, restaurant) => {
+            if (err) {
+                res.send(err);
+            } else {
+                restaurant.name = req.body.name;
+                restaurant.save(err => {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        res.json({message: "Restaurant updated"});
+                    }
+                });
+            }
+        });
+    });
     return api;
 }
