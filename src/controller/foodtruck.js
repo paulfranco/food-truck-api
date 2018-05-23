@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
 import FoodTruck from '../model/foodtruck';
+import Review from '../model/review';
 
 export default({ config, db}) => {
     let api = Router();
@@ -9,6 +10,9 @@ export default({ config, db}) => {
     api.post('/add', (req, res) => {
         let newFoodTruck = new FoodTruck();
         newFoodTruck.name = req.body.name;
+        newFoodTruck.foodtype = req.body.foodtype;
+        newFoodTruck.avgcost = req.body.avgcost;
+        newFoodTruck.geometry.coordinates = req.body.geometry.coordinates;
 
         newFoodTruck.save(err => {
             if (err) {
@@ -75,10 +79,10 @@ export default({ config, db}) => {
             if (err) {
                 res.send(err);
             } else {
-                let newReview = new newReview();
+                let newReview = new Review();
                 newReview.title = req.body.title;
                 newReview.text = req.body.text;
-                newReview.foodtrurck = foodtruck._id;
+                newReview.foodtruck = foodtruck._id;
                 
                 newReview.save((err, review) => {
                     if (err) {
@@ -94,6 +98,18 @@ export default({ config, db}) => {
                         });
                     }
                 });
+            }
+        });
+    });
+
+    // Retrieve all reviews for a specific foodtruck
+    // '/v1/foodtruck/reviews/:id
+    api.get('/reviews/:id', (req, res) => {
+        Review.find({foodtruck: req.params.id}, (err, reviews) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(reviews);
             }
         });
     });
